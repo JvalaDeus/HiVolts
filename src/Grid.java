@@ -2,11 +2,13 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.swing.JFrame;
 
-public class Grid extends JFrame {
+public class Grid extends JFrame implements KeyListener {
 	private static final long serialVersionUID = 1L;
 	int numRows = 12;
 	int numColumns = 12;
@@ -14,11 +16,11 @@ public class Grid extends JFrame {
 	int xOffset = 3;
 	int yOffset = 35;
 	int unoccupied = 0;
-	int fence = 1;
-	int player = 2;
-	int mho = 3;
-	int min = 1;
-	int max = 10;
+	int FenceNum = 1;
+	int playerNum = 2;
+	int mhoNum = 3;
+	int min = 0;
+	int max = 11;
 
 	public static void main(String[] args) {
 		Grid grid = new Grid();
@@ -33,24 +35,65 @@ public class Grid extends JFrame {
 
 	public void init() {
 		setSize(600, 600);
-		// cells[numRows][numColumns] = unoccupied;
 		for (int column = 0; column < 12; column++) {
 			for (int horiBox = 0; horiBox < 12; horiBox++) {
 				if (column == 0 || column == 11 || horiBox == 0 || horiBox == 11) {
-					cells[horiBox][column] = fence;
+					cells[horiBox][column] = FenceNum;
+				} else {
+					cells[horiBox][column] = unoccupied;
 				}
 			}
-			for (int Mhos = 0; Mhos < 12; Mhos++) {
-				cells[randInt(min, max)][randInt(min, max)] = mho;
+		}
+		for (int column = 0; column < 12; column++) {
+			for (int horiBox = 0; horiBox < 12; horiBox++) {
+				System.out.println(cells[horiBox][column] + " " + horiBox + " " + column + "before");
 			}
-			for (int insideFences = 0; insideFences < 20; insideFences++) {
-				cells[randInt(min, max)][randInt(min, max)] = fence;
-			}
-			for (int you = 0; you < 1; you++) {
-				cells[randInt(min, max)][randInt(min, max)] = player;
+		}
+		randSpawner();
+		for (int column = 0; column < 12; column++) {
+			for (int horiBox = 0; horiBox < 12; horiBox++) {
+				System.out.println(cells[horiBox][column] + " " + horiBox + " " + column + "after");
 			}
 		}
 		repaint();
+	}
+
+	public void randSpawner() {
+		int randX;
+		int randY;
+		for (int Mhos = 0; Mhos < 12; Mhos++) {
+			while (true) {
+				randX = randInt(min, max);
+				randY = randInt(min, max);
+				if (cells[randX][randY] == unoccupied) {
+					cells[randX][randY] = mhoNum;
+					System.out.println("mho" + randX + "" + randY);
+					break;
+				}
+			}
+
+		}
+		for (int fence = 0; fence < 20; fence++) {
+			while (true) {
+				randX = randInt(min, max);
+				randY = randInt(min, max);
+				if (cells[randX][randY] == unoccupied) {
+					cells[randX][randY] = FenceNum;
+					System.out.println("fence" + randX + "" + randY);
+					break;
+				}
+			}
+		}
+
+		while (true) {
+			randX = randInt(min, max);
+			randY = randInt(min, max);
+			if (cells[randX][randY] == unoccupied) {
+				cells[randX][randY] = playerNum;
+				System.out.println("player" + randX + "" + randY);
+				break;
+			}
+		}
 	}
 
 	public void paint(Graphics g) {
@@ -58,21 +101,21 @@ public class Grid extends JFrame {
 		int cellHeight = getHeight() / 13;
 		for (int column = 0; column < 12; column++) {
 			for (int horiBox = 0; horiBox < 12; horiBox++) {
-				if (cells[horiBox][column] == fence) {
+				if (cells[horiBox][column] == FenceNum) {
 					Graphics2D g2 = (Graphics2D) g;
 					Image fenceImage = Toolkit.getDefaultToolkit().getImage("download.jpg");
 					g2.drawImage(fenceImage, xOffset + horiBox * cellWidth, column * cellHeight + yOffset, cellWidth,
 							cellHeight, this);
 					g2.finalize();
 				}
-				if (cells[horiBox][column] == mho) {
+				if (cells[horiBox][column] == mhoNum) {
 					Graphics2D g2 = (Graphics2D) g;
 					Image fenceImage = Toolkit.getDefaultToolkit().getImage("mho.jpg");
 					g2.drawImage(fenceImage, xOffset + horiBox * cellWidth, column * cellHeight + yOffset, cellWidth,
 							cellHeight, this);
 					g2.finalize();
 				}
-				if (cells[horiBox][column] == player) {
+				if (cells[horiBox][column] == playerNum) {
 					Graphics2D g2 = (Graphics2D) g;
 					Image fenceImage = Toolkit.getDefaultToolkit().getImage("Player.png");
 					g2.drawImage(fenceImage, xOffset + horiBox * cellWidth, column * cellHeight + yOffset, cellWidth,
@@ -90,5 +133,44 @@ public class Grid extends JFrame {
 		int randomNum = ThreadLocalRandom.current().nextInt(min, max + 1);
 
 		return randomNum;
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_W) {
+
+		}
+		if (e.getKeyCode() == KeyEvent.VK_A) {
+
+		}
+		if (e.getKeyCode() == KeyEvent.VK_S) {
+
+		}
+		if (e.getKeyCode() == KeyEvent.VK_D) {
+
+		}
+		if (e.getKeyCode() == KeyEvent.VK_Q) {
+
+		}
+		if (e.getKeyCode() == KeyEvent.VK_E) {
+
+		}
+		if (e.getKeyCode() == KeyEvent.VK_Z) {
+
+		}
+		if (e.getKeyCode() == KeyEvent.VK_C) {
+
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 }
