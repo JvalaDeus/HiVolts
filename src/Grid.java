@@ -5,14 +5,14 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.concurrent.ThreadLocalRandom;
-
 import javax.swing.JFrame;
 
-public class Grid extends JFrame implements KeyListener {
+public class Grid extends YouLose implements KeyListener {
 	private static final long serialVersionUID = 1L;
 	int numRows = 12;
 	int numColumns = 12;
 	int[][] cells = new int[numRows][numColumns];
+	int[] playerCell = new int[2];
 	int xOffset = 3;
 	int yOffset = 35;
 	int unoccupied = 0;
@@ -21,7 +21,8 @@ public class Grid extends JFrame implements KeyListener {
 	int mhoNum = 3;
 	int min = 0;
 	int max = 11;
-
+	YouLose gameOver = new YouLose();
+	
 	public static void main(String[] args) {
 		Grid grid = new Grid();
 		grid.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -35,6 +36,7 @@ public class Grid extends JFrame implements KeyListener {
 
 	public void init() {
 		setSize(600, 600);
+		this.addKeyListener(this);
 		for (int column = 0; column < 12; column++) {
 			for (int horiBox = 0; horiBox < 12; horiBox++) {
 				if (column == 0 || column == 11 || horiBox == 0 || horiBox == 11) {
@@ -44,17 +46,7 @@ public class Grid extends JFrame implements KeyListener {
 				}
 			}
 		}
-		for (int column = 0; column < 12; column++) {
-			for (int horiBox = 0; horiBox < 12; horiBox++) {
-				System.out.println(cells[horiBox][column] + " " + horiBox + " " + column + "before");
-			}
-		}
 		randSpawner();
-		for (int column = 0; column < 12; column++) {
-			for (int horiBox = 0; horiBox < 12; horiBox++) {
-				System.out.println(cells[horiBox][column] + " " + horiBox + " " + column + "after");
-			}
-		}
 		repaint();
 	}
 
@@ -67,7 +59,6 @@ public class Grid extends JFrame implements KeyListener {
 				randY = randInt(min, max);
 				if (cells[randX][randY] == unoccupied) {
 					cells[randX][randY] = mhoNum;
-					System.out.println("mho" + randX + "" + randY);
 					break;
 				}
 			}
@@ -79,7 +70,6 @@ public class Grid extends JFrame implements KeyListener {
 				randY = randInt(min, max);
 				if (cells[randX][randY] == unoccupied) {
 					cells[randX][randY] = FenceNum;
-					System.out.println("fence" + randX + "" + randY);
 					break;
 				}
 			}
@@ -90,7 +80,8 @@ public class Grid extends JFrame implements KeyListener {
 			randY = randInt(min, max);
 			if (cells[randX][randY] == unoccupied) {
 				cells[randX][randY] = playerNum;
-				System.out.println("player" + randX + "" + randY);
+				playerCell[0] = randX;
+				playerCell[1] = randY;
 				break;
 			}
 		}
@@ -123,6 +114,14 @@ public class Grid extends JFrame implements KeyListener {
 					g2.finalize();
 					g.drawRect(xOffset + horiBox * cellWidth, column * cellHeight + yOffset, cellWidth, cellHeight);
 				}
+				if (cells[horiBox][column] == unoccupied) {
+					Graphics2D g2 = (Graphics2D) g;
+					Image fenceImage = Toolkit.getDefaultToolkit().getImage("Grass.jpg");
+					g2.drawImage(fenceImage, xOffset + horiBox * cellWidth, column * cellHeight + yOffset, cellWidth,
+							cellHeight, this);
+					g2.finalize();
+					g.drawRect(xOffset + horiBox * cellWidth, column * cellHeight + yOffset, cellWidth, cellHeight);
+				}
 			}
 		}
 	}
@@ -137,29 +136,46 @@ public class Grid extends JFrame implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		int originalX = playerCell[0];
+		int originalY = playerCell[1];
 		if (e.getKeyCode() == KeyEvent.VK_W) {
-
+			playerCell[0] = playerCell[0];
+			playerCell[1] = playerCell[1] - 1;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_A) {
-
+			playerCell[0] = playerCell[0] - 1;
+			playerCell[1] = playerCell[1];
 		}
 		if (e.getKeyCode() == KeyEvent.VK_S) {
-
+			playerCell[0] = playerCell[0];
+			playerCell[1] = playerCell[1] + 1;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_D) {
-
+			playerCell[0] = playerCell[0] + 1;
+			playerCell[1] = playerCell[1];
 		}
 		if (e.getKeyCode() == KeyEvent.VK_Q) {
-
+			playerCell[0] = playerCell[0] - 1;
+			playerCell[1] = playerCell[1] - 1;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_E) {
-
+			playerCell[0] = playerCell[0] + 1;
+			playerCell[1] = playerCell[1] - 1;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_Z) {
-
+			playerCell[0] = playerCell[0] - 1;
+			playerCell[1] = playerCell[1] + 1;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_C) {
-
+			playerCell[0] = playerCell[0] + 1;
+			playerCell[1] = playerCell[1] + 1;
+		}
+		if (cells[playerCell[0]][playerCell[1]] == mhoNum || cells[playerCell[0]][playerCell[1]] == FenceNum) {
+			YouLose.main(null);
+		} else {
+			cells[playerCell[0]][playerCell[1]] = playerNum;
+			cells[originalX][originalY] = unoccupied;
+			repaint();
 		}
 	}
 
