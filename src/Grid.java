@@ -7,8 +7,9 @@ import java.awt.event.KeyListener;
 import java.util.concurrent.ThreadLocalRandom;
 import javax.swing.JFrame;
 
-public class Grid extends YouLose implements KeyListener {
+public class Grid extends JFrame implements KeyListener {
 	private static final long serialVersionUID = 1L;
+	Mho[] mhoArray = new Mho[12];
 	int numRows = 12;
 	int numColumns = 12;
 	int[][] cells = new int[numRows][numColumns];
@@ -21,8 +22,10 @@ public class Grid extends YouLose implements KeyListener {
 	int mhoNum = 3;
 	int min = 0;
 	int max = 11;
+	int initialMhoX;
+	int initialMhoY;
 	YouLose gameOver = new YouLose();
-	
+
 	public static void main(String[] args) {
 		Grid grid = new Grid();
 		grid.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -33,7 +36,7 @@ public class Grid extends YouLose implements KeyListener {
 	public Grid() {
 		init();
 	}
-	
+
 	public void init() {
 		setSize(600, 600);
 		this.addKeyListener(this);
@@ -53,6 +56,7 @@ public class Grid extends YouLose implements KeyListener {
 	public void randSpawner() {
 		int randX;
 		int randY;
+		int mhoArrayIndex = 0;
 		for (int Mhos = 0; Mhos < 12; Mhos++) {
 			while (true) {
 				randX = randInt(min, max);
@@ -61,8 +65,10 @@ public class Grid extends YouLose implements KeyListener {
 					cells[randX][randY] = mhoNum;
 					break;
 				}
+				mhoArray[mhoArrayIndex].mhoCell[0] = randX;
+				mhoArray[mhoArrayIndex].mhoCell[1] = randY;
+				mhoArrayIndex++;
 			}
-
 		}
 		for (int fence = 0; fence < 20; fence++) {
 			while (true) {
@@ -138,6 +144,7 @@ public class Grid extends YouLose implements KeyListener {
 	public void keyPressed(KeyEvent e) {
 		int originalX = playerCell[0];
 		int originalY = playerCell[1];
+
 		if (e.getKeyCode() == KeyEvent.VK_W) {
 			playerCell[0] = playerCell[0];
 			playerCell[1] = playerCell[1] - 1;
@@ -170,6 +177,28 @@ public class Grid extends YouLose implements KeyListener {
 			playerCell[0] = playerCell[0] + 1;
 			playerCell[1] = playerCell[1] + 1;
 		}
+		if (e.getKeyCode() == KeyEvent.VK_J) {
+			playerCell[0] = randInt(min, max);
+			playerCell[1] = randInt(min, max);
+			while (true) {
+				if (cells[playerCell[0]][playerCell[1]] == FenceNum) {
+					playerCell[0] = randInt(min, max);
+					playerCell[1] = randInt(min, max);
+				}
+				if (cells[playerCell[0]][playerCell[1]] == unoccupied) {
+					cells[playerCell[0]][playerCell[1]] = playerNum;
+					cells[originalX][originalY] = unoccupied;
+					repaint();
+					break;
+				}
+				if (cells[playerCell[0]][playerCell[1]] == mhoNum) {
+					YouLose.main(null);
+					break;
+				}
+			}
+
+		}
+
 		if (cells[playerCell[0]][playerCell[1]] == mhoNum || cells[playerCell[0]][playerCell[1]] == FenceNum) {
 			YouLose.main(null);
 		} else {
