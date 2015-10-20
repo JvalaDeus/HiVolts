@@ -12,7 +12,7 @@ public class YouWin extends JFrame {
 	public static void main(String[] args) {
 		YouWin gameOver = new YouWin();
 		gameOver.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gameOver.setTitle("Game Over: You lost!");
+		gameOver.setTitle("Game Over: You Won!");
 		gameOver.setSize(340, 210);
 		gameOver.setVisible(true);
 

@@ -30,6 +30,7 @@ public class Grid extends JFrame implements KeyListener {
 	int originalMhoPositionX;
 	int originalMhoPositionY;
 	YouLose gameOver = new YouLose();
+	YouWin gameWon = new YouWin();
 
 	public static void main(String[] args) {
 		Grid grid = new Grid();
@@ -144,11 +145,12 @@ public class Grid extends JFrame implements KeyListener {
 	public void mhoMovement() {
 		int newX = 0;
 		int newY = 0;
+		int foundAMho = 0;
 
 		for (int horiBox = 0; horiBox < 12; horiBox++) {
 			for (int column = 0; column < 12; column++) {
 				if (cells[horiBox][column] == mhoNum) {
-					System.out.println("found a mho");
+					foundAMho = 1;
 					originalMhoPositionX = horiBox;
 					originalMhoPositionY = column;
 					if (horiBox == playerCell[0]) {
@@ -193,7 +195,6 @@ public class Grid extends JFrame implements KeyListener {
 							newY = column + 1;
 						}
 					}
-
 					if (cells[newX][newY] == playerNum) {
 						YouLose.main(null);
 					} else if (cells[newX][newY] == FenceNum) {
@@ -204,6 +205,10 @@ public class Grid extends JFrame implements KeyListener {
 					}
 				}
 			}
+		}
+		System.out.println(foundAMho);
+		if (foundAMho == 0) {
+			YouWin.main(null);
 		}
 		repaint();
 	}
