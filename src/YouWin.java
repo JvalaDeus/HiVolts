@@ -3,17 +3,17 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class YouLose extends YouWin {
+public class YouWin extends JFrame {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
 	public static void main(String[] args) {
-		YouLose gameOver = new YouLose();
+		YouWin gameOver = new YouWin();
 		gameOver.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameOver.setTitle("Game Over: You lost!");
-		gameOver.setSize(300, 210);
+		gameOver.setSize(325, 210);
 		gameOver.setVisible(true);
 
 		JPanel panel = new JPanel();
@@ -21,17 +21,17 @@ public class YouLose extends YouWin {
 		gameOver.add(panel);
 		gameOver.setResizable(false);
 		
-		TextField text = new TextField("Im sorry, you lost! Would you like to play again?");
-		text.setBounds(0,0,300,100);
+		TextField text = new TextField("Congradulations, you won! Would you like to play again?");
+		text.setBounds(0,0,325,100);
 		panel.add(text);
 
 		JButton giveUp = new JButton("Close game window");
-		giveUp.setBounds(150, 120, 150, 60);
+		giveUp.setBounds(160, 120, 160, 60);
 		panel.add(giveUp);
 		giveUp.addActionListener(e -> System.exit(0));
 
 		JButton playAgain = new JButton("Play again");
-		playAgain.setBounds(0, 120, 150, 60);
+		playAgain.setBounds(0, 120, 160, 60);
 		panel.add(playAgain);
 	//	playAgain.addActionListener(e -> gameOver.dispatchEvent(new WindowEvent(gameOver, WindowEvent.WINDOW_CLOSING)));
 		playAgain.addActionListener(e -> Grid.main(args));

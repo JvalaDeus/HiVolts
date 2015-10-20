@@ -33,7 +33,7 @@ public class Grid extends YouLose implements KeyListener {
 	public Grid() {
 		init();
 	}
-
+	
 	public void init() {
 		setSize(600, 600);
 		this.addKeyListener(this);
