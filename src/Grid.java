@@ -9,7 +9,6 @@ import javax.swing.JFrame;
 
 public class Grid extends JFrame implements KeyListener {
 	private static final long serialVersionUID = 1L;
-	Mho[] mhoArray = new Mho[12];
 	int numRows = 12;
 	int numColumns = 12;
 	int[][] cells = new int[numRows][numColumns];
@@ -24,6 +23,8 @@ public class Grid extends JFrame implements KeyListener {
 	int max = 11;
 	int initialMhoX;
 	int initialMhoY;
+	int mhoXCoordinate;
+	int mhoYCoordinate;
 	YouLose gameOver = new YouLose();
 
 	public static void main(String[] args) {
@@ -56,18 +57,14 @@ public class Grid extends JFrame implements KeyListener {
 	public void randSpawner() {
 		int randX;
 		int randY;
-		int mhoArrayIndex = 0;
 		for (int Mhos = 0; Mhos < 12; Mhos++) {
 			while (true) {
 				randX = randInt(min, max);
-				randY = randInt(min, max);
+				randY = randInt(min, max);	
 				if (cells[randX][randY] == unoccupied) {
 					cells[randX][randY] = mhoNum;
 					break;
 				}
-				mhoArray[mhoArrayIndex].mhoCell[0] = randX;
-				mhoArray[mhoArrayIndex].mhoCell[1] = randY;
-				mhoArrayIndex++;
 			}
 		}
 		for (int fence = 0; fence < 20; fence++) {
@@ -205,6 +202,7 @@ public class Grid extends JFrame implements KeyListener {
 			cells[playerCell[0]][playerCell[1]] = playerNum;
 			cells[originalX][originalY] = unoccupied;
 			repaint();
+			Mho.main(null);
 		}
 	}
 
