@@ -1,6 +1,9 @@
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.TextField;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class YouLose extends JFrame {
@@ -19,10 +22,13 @@ public class YouLose extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setLayout(null);
 		gameOver.add(panel);
+		panel.setBackground(Color.ORANGE);
 		gameOver.setResizable(false);
 
-		TextField text = new TextField("Im sorry, you lost! Would you like to play again?");
-		text.setBounds(0, 0, 340, 120);
+		JLabel text = new JLabel("Im sorry, you lost! Play again?");
+		text.setFont(new Font("Serif", Font.BOLD, 25));
+		text.setForeground(Color.RED);
+		text.setBounds(10, 0, 340, 120);
 		panel.add(text);
 
 		JButton giveUp = new JButton("Close all game windows");
