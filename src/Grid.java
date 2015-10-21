@@ -217,13 +217,34 @@ public class Grid extends JFrame implements KeyListener {
 		return randomNum;
 	}
 
+	/**
+	 * This function is what allows the mhos to move. It is called after you hit
+	 * a key under KeyPressed. First it runs a for loop for each of the 12 mhos.
+	 * If the mho is set to be alive, then it sees which way the mho should
+	 * move. To do this it does two things. First it checks the coordinates of
+	 * the mho and the player to determine whether to move horizontally,
+	 * vertically, or diagonally. Then it subtracts the coordinates to determine
+	 * which way to move horizontally, vertically, or diagonally. For instance,
+	 * if it is in the same column, it sees that the x coordinate is the same.
+	 * So it does Mho y - player y and sees that it is negative, meaning that
+	 * the mho is below the player, and must move upward. It also has
+	 * conditions, like the player, to check if the cell it is moving into is a
+	 * player, fence,or another mho. If it is a player, it pulls up
+	 * youlose.main(), if it is a fence, it is set to dead, and if it is a mho
+	 * it does nothing. In the if statement, it sets foundAMho to be true. This
+	 * is because it is only true if a mho is alive. If none are alive, then it
+	 * does not go through the first if statement because no mho is set to
+	 * alive. Therefore foundAMho is = 0, and goes to the corresponding if
+	 * statement, which pulls up YouWin.main(null);
+	 */
 	public void mhoMovement() {
 		int newX = 0;
 		int newY = 0;
-		int mhoArrayIndex = 0;
+		boolean foundAMho = false;
 
-		for (int mho = 0; mho < 12; mho++) {
+		for (int mhoArrayIndex = 0; mhoArrayIndex < 12; mhoArrayIndex++) {
 			if (mhoStatus[mhoArrayIndex] == alive) {
+				foundAMho = true;
 				originalMhoPositionX = mhoCoord[mhoArrayIndex][0];
 				originalMhoPositionY = mhoCoord[mhoArrayIndex][1];
 				if (mhoCoord[mhoArrayIndex][0] == playerCell[0]) {
@@ -277,12 +298,15 @@ public class Grid extends JFrame implements KeyListener {
 					mhoStatus[mhoArrayIndex] = dead;
 				} else if (cells[newX][newY] == unoccupied) {
 					cells[newX][newY] = mhoNum;
+					mhoCoord[mhoArrayIndex][0] = newX;
+					mhoCoord[mhoArrayIndex][1] = newY;
 					cells[originalMhoPositionX][originalMhoPositionY] = unoccupied;
 				}
 			}
-			mhoArrayIndex++;
 		}
-		repaint();
+		if (foundAMho == false) {
+			YouWin.main(null);
+		}
 	}
 
 	/**
@@ -316,11 +340,15 @@ public class Grid extends JFrame implements KeyListener {
 		}
 		if (e.getKeyCode() == KeyEvent.VK_S) {
 			playerCell[0] = playerCell[0];
-			playerCell[1] = playerCell[1] + 1;
+			playerCell[1] = playerCell[1];
 		}
 		if (e.getKeyCode() == KeyEvent.VK_D) {
 			playerCell[0] = playerCell[0] + 1;
 			playerCell[1] = playerCell[1];
+		}
+		if (e.getKeyCode() == KeyEvent.VK_X) {
+			playerCell[0] = playerCell[0];
+			playerCell[1] = playerCell[1] + 1;
 		}
 		if (e.getKeyCode() == KeyEvent.VK_Q) {
 			playerCell[0] = playerCell[0] - 1;
@@ -349,7 +377,6 @@ public class Grid extends JFrame implements KeyListener {
 				if (cells[playerCell[0]][playerCell[1]] == unoccupied) {
 					cells[playerCell[0]][playerCell[1]] = playerNum;
 					cells[originalX][originalY] = unoccupied;
-					repaint();
 					break;
 				}
 				if (cells[playerCell[0]][playerCell[1]] == mhoNum) {
@@ -365,8 +392,8 @@ public class Grid extends JFrame implements KeyListener {
 		} else {
 			cells[playerCell[0]][playerCell[1]] = playerNum;
 			cells[originalX][originalY] = unoccupied;
-			repaint();
 			mhoMovement();
+			repaint();
 		}
 	}
 
