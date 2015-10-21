@@ -32,7 +32,7 @@ public class GameStart extends JFrame {
 
 		// creates all the text that explains the controls & rules
 		JLabel title = new JLabel("Controls & Rules");
-		title.setBounds(175, -20, 340, 120);
+		title.setBounds(100, -20, 500, 120);
 		title.setFont(new Font("Serif", Font.BOLD, 50));
 		title.setForeground(Color.BLACK);
 		panel.add(title);
