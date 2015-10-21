@@ -10,7 +10,6 @@ public class YouLose extends JFrame {
 	 * This creates a window that tells the player if they lost. It also asks if
 	 * they would like to play again, and presents two buttons. "play again"
 	 * opens a new game, and "close all windows", well, it closes all windows.
-	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 
