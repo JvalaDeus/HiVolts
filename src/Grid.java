@@ -23,8 +23,8 @@ public class Grid extends JFrame implements KeyListener {
 
 	// stores the players cell information
 	int[] playerCell = new int[2];
-	
-	//stores the mhos' cells informations
+
+	// stores the mhos' cells informations
 	int[][] mhoCoord = new int[12][2];
 	int[] mhoStatus = new int[12];
 
@@ -38,8 +38,8 @@ public class Grid extends JFrame implements KeyListener {
 	int FenceNum = 1;
 	int playerNum = 2;
 	int mhoNum = 3;
-	
-	//status of the mhos
+
+	// status of the mhos
 	int dead = 0;
 	int alive = 1;
 
@@ -57,7 +57,7 @@ public class Grid extends JFrame implements KeyListener {
 	int originalMhoPositionX;
 	int originalMhoPositionY;
 
-	// instances of the youlose/win classes
+	// instances of the other classes
 	YouLose gameOver = new YouLose();
 	YouWin gameWon = new YouWin();
 
@@ -117,7 +117,7 @@ public class Grid extends JFrame implements KeyListener {
 		int randX;
 		int randY;
 		int mhoArrayIndex = 0;
-		
+
 		for (int Mhos = 0; Mhos < 12; Mhos++) {
 			while (true) {
 				randX = randInt(min, max);
@@ -216,78 +216,75 @@ public class Grid extends JFrame implements KeyListener {
 
 		return randomNum;
 	}
-/**
+
 	public void mhoMovement() {
 		int newX = 0;
 		int newY = 0;
-		int foundAMho = 0;
+		int mhoArrayIndex = 0;
 
-		for (int horiBox = 0; horiBox < 12; horiBox++) {
-			for (int column = 0; column < 12; column++) {
-				if (cells[horiBox][column] == mhoNum) {
-					foundAMho = 1;
-					originalMhoPositionX = horiBox;
-					originalMhoPositionY = column;
-					if (horiBox == playerCell[0]) {
-						directionY = (column - playerCell[1]);
-						if (directionY > 0) {
-							newX = horiBox;
-							newY = column - 1;
-						}
-						if (directionY < 0) {
-							newX = horiBox;
-							newY = column + 1;
-						}
+		for (int mho = 0; mho < 12; mho++) {
+			if (mhoStatus[mhoArrayIndex] == alive) {
+				originalMhoPositionX = mhoCoord[mhoArrayIndex][0];
+				originalMhoPositionY = mhoCoord[mhoArrayIndex][1];
+				if (mhoCoord[mhoArrayIndex][0] == playerCell[0]) {
+					directionY = (mhoCoord[mhoArrayIndex][1] - playerCell[1]);
+					if (directionY > 0) {
+						newX = mhoCoord[mhoArrayIndex][0];
+						newY = mhoCoord[mhoArrayIndex][1] - 1;
 					}
-					if (column == playerCell[1]) {
-						directionX = (horiBox - playerCell[0]);
-						if (directionX > 0) {
-							newX = horiBox + 1;
-							newY = column;
-						}
-						if (directionX < 0) {
-							newX = horiBox - 1;
-							newY = column;
-						}
-					}
-					if (horiBox != playerCell[0] && column != playerCell[1]) {
-						directionX = horiBox - playerCell[0];
-						directionY = column - playerCell[1];
-						if (directionX > 0 && directionY > 0) {
-							newX = horiBox - 1;
-							newY = column - 1;
-						}
-						if (directionX < 0 && directionY > 0) {
-							newX = horiBox + 1;
-							newY = column - 1;
-						}
-						if (directionX > 0 && directionY < 0) {
-							newX = horiBox - 1;
-							newY = column + 1;
-						}
-						if (directionX < 0 && directionY < 0) {
-							newX = horiBox + 1;
-							newY = column + 1;
-						}
-					}
-					if (cells[newX][newY] == playerNum) {
-						YouLose.main(null);
-					} else if (cells[newX][newY] == FenceNum) {
-						cells[originalMhoPositionX][originalMhoPositionY] = unoccupied;
-					} else if (cells[newX][newY] == unoccupied) {
-						cells[newX][newY] = mhoNum;
-						cells[originalMhoPositionX][originalMhoPositionY] = unoccupied;
+					if (directionY < 0) {
+						newX = mhoCoord[mhoArrayIndex][0];
+						newY = mhoCoord[mhoArrayIndex][1] + 1;
 					}
 				}
+				if (mhoCoord[mhoArrayIndex][1] == playerCell[1]) {
+					directionX = (mhoCoord[mhoArrayIndex][0] - playerCell[0]);
+					if (directionX > 0) {
+						newX = mhoCoord[mhoArrayIndex][0] + 1;
+						newY = mhoCoord[mhoArrayIndex][1];
+					}
+					if (directionX < 0) {
+						newX = mhoCoord[mhoArrayIndex][0] - 1;
+						newY = mhoCoord[mhoArrayIndex][1];
+					}
+				}
+				if (mhoCoord[mhoArrayIndex][0] != playerCell[0] && mhoCoord[mhoArrayIndex][1] != playerCell[1]) {
+					directionX = mhoCoord[mhoArrayIndex][0] - playerCell[0];
+					directionY = mhoCoord[mhoArrayIndex][1] - playerCell[1];
+					if (directionX > 0 && directionY > 0) {
+						newX = mhoCoord[mhoArrayIndex][0] - 1;
+						newY = mhoCoord[mhoArrayIndex][1] - 1;
+					}
+					if (directionX < 0 && directionY > 0) {
+						newX = mhoCoord[mhoArrayIndex][0] + 1;
+						newY = mhoCoord[mhoArrayIndex][1] - 1;
+					}
+					if (directionX > 0 && directionY < 0) {
+						newX = mhoCoord[mhoArrayIndex][0] - 1;
+						newY = mhoCoord[mhoArrayIndex][1] + 1;
+					}
+					if (directionX < 0 && directionY < 0) {
+						newX = mhoCoord[mhoArrayIndex][0] + 1;
+						newY = mhoCoord[mhoArrayIndex][1] + 1;
+					}
+				}
+
+				if (cells[newX][newY] == playerNum) {
+					YouLose.main(null);
+				}
+				if (cells[newX][newY] == FenceNum) {
+					cells[originalMhoPositionX][originalMhoPositionY] = unoccupied;
+					mhoStatus[mhoArrayIndex] = dead;
+				} else if (cells[newX][newY] == unoccupied) {
+					cells[newX][newY] = mhoNum;
+					cells[originalMhoPositionX][originalMhoPositionY] = unoccupied;
+				}
 			}
-		}
-		System.out.println(foundAMho);
-		if (foundAMho == 0) {
-			YouWin.main(null);
+			mhoArrayIndex++;
 		}
 		repaint();
 	}
-*/
+
 	/**
 	 * Here is the player movement. The player cell array now sets the [0] to
 	 * the x and the [1] to the y. What happens is that now when you hit
@@ -368,8 +365,8 @@ public class Grid extends JFrame implements KeyListener {
 		} else {
 			cells[playerCell[0]][playerCell[1]] = playerNum;
 			cells[originalX][originalY] = unoccupied;
-			Mho.mhoMovement();
 			repaint();
+			mhoMovement();
 		}
 	}
 
