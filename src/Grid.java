@@ -78,7 +78,6 @@ public class Grid extends JFrame implements KeyListener {
 	}
 
 	/**
-	 * keyListener, so you can move in the game by hitting a key. After that it
 	 * The init class. It sets the size of the grid, then it adds the
 	 * keyListener so you can move in the game by hitting a key. After that it
 	 * creates two for loops so it can run through the grid again. When it runs
